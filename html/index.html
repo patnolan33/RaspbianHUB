@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://fb.me/react-with-addons-0.13.3.js"></script>
+
+        <!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">-->
+        <link href="./font/MaterialIcons.tff" rel="stylesheet">
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="./css/bootstrap.min.css">
+
+        <!-- Weather icons (fonts and styles) -->
+        <link href="./font/weathericons-regular-webfont.ttf" rel="stylesheet">
+        <link href="./font/weathericons-regular-webfont.eot" rel="stylesheet">
+        <link href="./font/weathericons-regular-webfont.svg" rel="stylesheet">
+        <link href="./font/weathericons-regular-webfont.woff" rel="stylesheet">
+        <link href="./font/weathericons-regular-webfont.woff2" rel="stylesheet">
+
+        <link rel="stylesheet" href="./css/weather-icons.min.css">
+        <link rel="stylesheet" href="./css/weather-icons-wind.min.css">
+
+        <!-- Heron Systems CSS -->
+        <link rel="stylesheet" href="./css/raspbianHUB/style.css">
+
+        <meta charset="utf-8">
+        <title>raspbianHUB</title>
+
+    </head>
+    <body style="overflow: hidden; margin:0; padding: 0;">
+
+        <div id="hub-container"></div>
+
+        <!-- <script>
+          require('../app/build/containers/AppContainer.js');
+          require('../app/build/app.js');
+        </script> -->
+
+    <script>
+        var bundlePath = '../app/build/bundle.js';
+        if(typeof process !== 'undefined' && process.env.NODE_ENV === 'development') {
+            bundlePath = `http://localhost:${process.env.PORT}/app/build/bundle.js`;
+        }
+        var bundleScriptEl = document.createElement('script');
+        window.electronRequire = require;
+        bundleScriptEl.src = bundlePath;
+        document.currentScript.parentNode.insertBefore(bundleScriptEl, document.currentScript);
+</script>
+
+<script>
+window.child_process = require('child_process');
+</script>
+
+
+    </body>
+
+</html>
