@@ -38,24 +38,34 @@ export class Lights extends React.Component<Props, State> {
     }
 
     runPythonScript = () => {
-// TODO: Uncomment to run python script when buttonis pushed
-// console.log("TODO: Uncomment runPythonScript when ready to test on NeoPixel strip")
+console.log("TODO: Figure out passing color argument(s)");
 
         let options = {
             mode: "text",
             pythonOptions: ["-u"],
-            scriptPath: "./python/",
-            args: ['#0f0f0f']
+            scriptPath: "./python/"
         };
 
-        PythonShell.run('Solid.py', options, function(err: any, results: any) {
-            if(err){
-                console.log(err);
-                throw err;
-            }
+        if(this.state.lightsOn === false) {
+            PythonShell.run('LightsOff.py', options, function(err: any, results: any) {
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
 
-            console.log(results);
-        }.bind(this));
+                console.log(results);
+            }.bind(this));
+        }
+        else {
+            PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
+                if(err){
+                    console.log(err);
+                    throw err;
+                }
+
+                console.log(results);
+            }.bind(this));
+        }
     }
 
     handleChangeLightBehavior = (behavior: string) => {
@@ -64,7 +74,7 @@ export class Lights extends React.Component<Props, State> {
             script = 'Solid.py';
         }
         else if(behavior === 'blink') {
-            script = 'Blink.py';
+            script = 'Strandtest.py';
         }
 
         this.setState({pythonScript: script});

@@ -58,6 +58,4 @@ if __name__ == '__main__':
 	strip.begin()
 
 	# while True:
-		colorWipe(strip, Color(255, 0, 0))  # Red wipe
-		colorWipe(strip, Color(0, 255, 0))  # Blue wipe
-		colorWipe(strip, Color(0, 0, 255))  # Green wipe
+		colorWipe(strip, Color(0, 0, 0))  # Set to off
