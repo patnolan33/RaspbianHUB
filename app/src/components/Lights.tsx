@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import { SwatchesPicker, ChromePicker } from 'react-color';
 
 import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
-// var PythonShell = require('python-shell');
+var PythonShell = require('python-shell');
 
 type Props = {
 }
@@ -39,23 +39,23 @@ export class Lights extends React.Component<Props, State> {
 
     runPythonScript = () => {
 // TODO: Uncomment to run python script when buttonis pushed
-console.log("TODO: Uncomment runPythonScript when ready to test on NeoPixel strip")
+// console.log("TODO: Uncomment runPythonScript when ready to test on NeoPixel strip")
 
-        // let options = {
-        //     mode: "text",
-        //     pythonOptions: ["-u"],
-        //     scriptPath: "./python/",
-        //     args: ['#000000']
-        // };
+        let options = {
+            mode: "text",
+            pythonOptions: ["-u"],
+            scriptPath: "./python/",
+            args: ['#0f0f0f']
+        };
 
-        // PythonShell.run('Solid.py', options, function(err: any, results: any) {
-        //     if(err){
-        //         console.log(err);
-        //         throw err;
-        //     }
+        PythonShell.run('Solid.py', options, function(err: any, results: any) {
+            if(err){
+                console.log(err);
+                throw err;
+            }
 
-        //     console.log(results);
-        // }.bind(this));
+            console.log(results);
+        }.bind(this));
     }
 
     handleChangeLightBehavior = (behavior: string) => {
@@ -108,26 +108,6 @@ console.log("TODO: Uncomment runPythonScript when ready to test on NeoPixel stri
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div>
-                    {this.state.pickerType === "swatch" &&
-                        <SwatchesPicker
-                            color={this.state.color}
-                            onChangeComplete={this.handleChangeComplete}
-                        />
-                    }
-                    {this.state.pickerType === "chrome" &&
-                        <ChromePicker
-                            color={this.state.color}
-                            onChangeComplete={this.handleChangeComplete}
-                        />
-                    }
-                    {this.state.pickerType === "custom" &&
-                        <CustomColorPicker
-                            onChangeColor={this.handleChangeColor}
-                         />
-                    }
-
-
-
                     {this.state.lightsOn === true ?
                         <RaisedButton
                             icon={<i className="material-icons">power_settings_new</i>}
@@ -152,6 +132,26 @@ console.log("TODO: Uncomment runPythonScript when ready to test on NeoPixel stri
                         onClick={() => this.handleChangeLightBehavior('blink')}
                         label="Blink"
                     />
+
+
+                    {this.state.pickerType === "swatch" &&
+                        <SwatchesPicker
+                            color={this.state.color}
+                            onChangeComplete={this.handleChangeComplete}
+                        />
+                    }
+                    {this.state.pickerType === "chrome" &&
+                        <ChromePicker
+                            color={this.state.color}
+                            onChangeComplete={this.handleChangeComplete}
+                        />
+                    }
+                    {this.state.pickerType === "custom" &&
+                        <CustomColorPicker
+                            onChangeColor={this.handleChangeColor}
+                         />
+                    }
+
 
                 </div>
             </MuiThemeProvider>
