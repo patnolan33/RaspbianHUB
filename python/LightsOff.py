@@ -6,10 +6,6 @@
 import time
 import sys
 
-color = sys.argv[1]
-
-print "Color: %s." % color
-
 from neopixel import *
 
 import argparse
@@ -58,4 +54,4 @@ if __name__ == '__main__':
 	strip.begin()
 
 	# while True:
-		colorWipe(strip, Color(0, 0, 0))  # Set to off
+	colorWipe(strip, Color(0, 0, 0))  # Set to off

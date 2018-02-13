@@ -29,7 +29,7 @@ export class Lights extends React.Component<Props, State> {
         this.state = {
             color: '#fff',
             pickerType: 'custom',
-            pythonScript: '../../python/Solid.py',
+            pythonScript: 'Solid.py',
             lightsOn: false
         }
     }
@@ -43,10 +43,10 @@ console.log("TODO: Figure out passing color argument(s)");
         let options = {
             mode: "text",
             pythonOptions: ["-u"],
-            scriptPath: "./python/"
+	    scriptPath: "./python/"
         };
 
-        if(this.state.lightsOn === false) {
+        if(this.state.lightsOn === true) {
             PythonShell.run('LightsOff.py', options, function(err: any, results: any) {
                 if(err){
                     console.log(err);
@@ -57,6 +57,7 @@ console.log("TODO: Figure out passing color argument(s)");
             }.bind(this));
         }
         else {
+		console.log('PYTHON SCRIPT: ' + this.state.pythonScript);
             PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
                 if(err){
                     console.log(err);

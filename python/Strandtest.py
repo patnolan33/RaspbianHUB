@@ -6,10 +6,6 @@
 import time
 import sys
 
-color = sys.argv[1]
-
-print "Color: %s." % color
-
 from neopixel import *
 
 import argparse
@@ -46,6 +42,7 @@ def colorWipe(strip, color, wait_ms=50):
 		strip.setPixelColor(i, color)
 		strip.show()
 		time.sleep(wait_ms/1000.0)
+
 
 def theaterChase(strip, color, wait_ms=50, iterations=10):
 	"""Movie theater light style chaser animation."""
@@ -96,6 +93,7 @@ def theaterChaseRainbow(strip, wait_ms=50):
 			for i in range(0, strip.numPixels(), 3):
 				strip.setPixelColor(i+q, 0)
 
+
 # Main program logic follows:
 if __name__ == '__main__':
         # Process arguments
@@ -106,7 +104,7 @@ if __name__ == '__main__':
 	# Intialize the library (must be called once before other functions).
 	strip.begin()
 
-	print ('Press Ctrl-C to quit.')
+	# while True:
 	while True:
 		print ('Color wipe animations.')
 		colorWipe(strip, Color(255, 0, 0))  # Red wipe
