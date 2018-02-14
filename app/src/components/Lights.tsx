@@ -22,51 +22,75 @@ type State = {
 }
 
 export class Lights extends React.Component<Props, State> {
+    pythonShell: any;
 
     constructor(props: Props) {
         super(props);
 
         this.state = {
-            color: '#fff',
+            color: '#000000',
             pickerType: 'custom',
             pythonScript: 'Solid.py',
             lightsOn: false
         }
+
+        let options = {
+            mode: "text",
+            pythonOptions: ["-u"],
+	    scriptPath: "./python/",
+	    args: ['#000000', '-c']
+        };
+	this.pythonShell = PythonShell.run('Solid.py', options, function(err: any, results: any) {
+            if(err){
+                console.log(err);
+                throw err;
+            }
+
+            console.log(results);
+        }.bind(this));
     }
 
     componentDidMount() {
     }
 
     runPythonScript = () => {
-console.log("TODO: Figure out passing color argument(s)");
+	// Kill old python script:
+	this.pythonShell.childProcess.kill('SIGINT');
+	this.pythonShell = null;
 
         let options = {
             mode: "text",
             pythonOptions: ["-u"],
-	    scriptPath: "./python/"
+	    scriptPath: "./python/",
+	    args: [this.state.color, '-c']
         };
 
         if(this.state.lightsOn === true) {
-            PythonShell.run('LightsOff.py', options, function(err: any, results: any) {
-                if(err){
-                    console.log(err);
-                    throw err;
-                }
-
-                console.log(results);
-            }.bind(this));
+	    options = {
+	        mode: "text",
+	        pythonOptions: ["-u"],
+	        scriptPath: "./python/",
+	        args: ['#000000', '-c']
+	    };
         }
         else {
-		console.log('PYTHON SCRIPT: ' + this.state.pythonScript);
-            PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
-                if(err){
-                    console.log(err);
-                    throw err;
-                }
-
-                console.log(results);
-            }.bind(this));
+	console.log('COLOR: ' + this.state.color);
+	    options = {
+	        mode: "text",
+	        pythonOptions: ["-u"],
+	        scriptPath: "./python/",
+	        args: [this.state.color, '-c']
+	    };
         }
+
+        this.pythonShell = PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
+            if(err){
+                console.log(err);
+                throw err;
+            }
+
+            console.log(results);
+        }.bind(this));
     }
 
     handleChangeLightBehavior = (behavior: string) => {
@@ -82,28 +106,11 @@ console.log("TODO: Figure out passing color argument(s)");
     }
 
     handleChangeComplete = (color: any) => {
-        // color = {
-        //   hex: '#333',
-        //   rgb: {
-        //     r: 51,
-        //     g: 51,
-        //     b: 51,
-        //     a: 1,
-        //   },
-        //   hsl: {
-        //     h: 0,
-        //     s: 0,
-        //     l: .20,
-        //     a: 1,
-        //   },
-        // }
-
         console.log(color);
         this.setState({color: color.hex});
     }
 
     handleChangeColor = (color: string) => {
-        console.log(color);
         this.setState({color: color});
     }
 

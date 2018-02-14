@@ -8,7 +8,6 @@ import sys
 
 from neopixel import *
 
-import argparse
 import signal
 import sys
 def signal_handler(signal, frame):

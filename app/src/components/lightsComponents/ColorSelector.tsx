@@ -48,7 +48,7 @@ export class ColorSelector extends React.Component<Props, State> {
     }
 
     selectColor = (selectedLightColor: string) => {
-        this.props.onColorSelect(selectedLightColor);
+        this.props.onColorSelect(this.materialColors[selectedLightColor]);
 
         if(this.state.selectedColor === selectedLightColor) {
             this.props.onBack();
