@@ -74,7 +74,7 @@ export class ColorSelector extends React.Component<Props, State> {
     render() {
 
         const height = window.screen.height;
-        const width = window.screen.width;
+        // const width = window.screen.width;
 
         let keys = Object.keys(this.materialColors); //get keys from object as an array
         let length = this.props.baseColor.length;
@@ -118,8 +118,8 @@ export class ColorSelector extends React.Component<Props, State> {
                             backgroundColor={this.state.buttonColor}
                         />
                     </Col>
-                    <Col xs={11} md={11} style={{overflow: 'hidden', paddingRight: 0, paddingLeft: 0}}>
-                        <div style={{height: height - 150+'px', overflowY: 'scroll', width: width-160}}>
+                    <Col xs={11} md={11} style={{overflow: 'hidden', paddingRight: 0, paddingLeft: 0, left: 20+'px'}}>
+                        <div style={{height: height-50+'px', overflowY: 'scroll', width: 100+'%'}}>
                             {colorChoices}
                         </div>
                     </Col>

@@ -7,6 +7,7 @@ const darkMuiTheme = getMuiTheme(darkBaseTheme);
 
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import Paper from 'material-ui/Paper';
+import * as colors from 'material-ui/styles/colors';
 
 import { PageContainer } from './PageContainer';
 
@@ -25,7 +26,7 @@ export default class AppContainer extends React.Component<Props, State> {
 
     this.state = {
       openDrawer: false,
-      selectedPage: 0
+      selectedPage: 2
     }
   }
 
@@ -56,7 +57,7 @@ export default class AppContainer extends React.Component<Props, State> {
               activePage={this.state.selectedPage}
              />
 
-            <Paper zDepth={1} style={{position: 'absolute', bottom: 0, width: width + 'px'}}>
+            <Paper zDepth={1} style={{position: 'absolute', bottom: 0, width: width + 'px', borderTop: 'solid', borderTopColor: colors.grey800}}>
               <BottomNavigation selectedIndex={this.state.selectedPage}>
                 <BottomNavigationItem
                   label="Weather"

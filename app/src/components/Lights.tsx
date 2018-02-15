@@ -5,7 +5,9 @@ const darkMuiTheme = getMuiTheme(darkBaseTheme);
 import * as React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 
+import { Grid, Col } from 'react-bootstrap';
 import { SwatchesPicker, ChromePicker } from 'react-color';
+import * as colors from 'material-ui/styles/colors';
 
 import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
 var PythonShell = require('python-shell');
@@ -123,54 +125,86 @@ export class Lights extends React.Component<Props, State> {
 
     render() {
 
+        const height = window.screen.height;
+        // const width = window.screen.width;
+
+        const parentStyle = {
+            width: 100+'%',
+            display: 'flex' as 'flex',
+            flexDirection: 'column' as 'column'
+        }
+
+        const buttonStyle = {
+            width: 100+'%',
+            flex: 1,
+            borderStyle: 'solid',
+            borderColor: colors.grey800
+        }
+
+
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div>
-                    {this.state.lightsOn === true ?
-                        <RaisedButton
-                            icon={<i className="material-icons">power_settings_new</i>}
-                            onClick={() => this.handleLightsOn(false)}
-                            label="Off"
-                        />
-                        :
-                        <RaisedButton
-                            icon={<i className="material-icons">power_settings_new</i>}
-                            onClick={() => this.handleLightsOn(true)}
-                            label="On"
-                        />
-                    }
+                    <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
+                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-56+'px', display: 'flex'}}>
+                            <div style={parentStyle}>
+                                {this.state.lightsOn === true ?
+                                    <RaisedButton
+                                        icon={<i className="material-icons">power_settings_new</i>}
+                                        onClick={() => this.handleLightsOn(false)}
+                                        label="Off"
+                                        style={buttonStyle}
+                                        buttonStyle={{height: 100+'%'}}
+                                    />
+                                    :
+                                    <RaisedButton
+                                        icon={<i className="material-icons">power_settings_new</i>}
+                                        onClick={() => this.handleLightsOn(true)}
+                                        label="On"
+                                        style={buttonStyle}
+                                        buttonStyle={{height: 100+'%'}}
+                                    />
+                                }
 
-                    <RaisedButton
-                        icon={<i className="material-icons">lens</i>}
-                        onClick={() => this.handleChangeLightBehavior('solid')}
-                        label="Solid"
-                    />
-                    <RaisedButton
-                        icon={<i className="material-icons">hdr_strong</i>}
-                        onClick={() => this.handleChangeLightBehavior('blink')}
-                        label="Blink"
-                    />
+                                <RaisedButton
+                                    icon={<i className="material-icons">lens</i>}
+                                    onClick={() => this.handleChangeLightBehavior('solid')}
+                                    label="Solid"
+                                    style={buttonStyle}
+                                    buttonStyle={{height: 100+'%'}}
+                                />
+                                <RaisedButton
+                                    icon={<i className="material-icons">hdr_strong</i>}
+                                    onClick={() => this.handleChangeLightBehavior('blink')}
+                                    label="Blink"
+                                    style={buttonStyle}
+                                    buttonStyle={{height: 100+'%'}}
+                                />
+                            </div>
+                        </Col>
+
+                        <Col xs={10} md={10} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800}}>
+                            {this.state.pickerType === "swatch" &&
+                                <SwatchesPicker
+                                    color={this.state.color}
+                                    onChangeComplete={this.handleChangeComplete}
+                                />
+                            }
+                            {this.state.pickerType === "chrome" &&
+                                <ChromePicker
+                                    color={this.state.color}
+                                    onChangeComplete={this.handleChangeComplete}
+                                />
+                            }
+                            {this.state.pickerType === "custom" &&
+                                <CustomColorPicker
+                                    onChangeColor={this.handleChangeColor}
+                                />
+                            }
+                        </Col>
 
 
-                    {this.state.pickerType === "swatch" &&
-                        <SwatchesPicker
-                            color={this.state.color}
-                            onChangeComplete={this.handleChangeComplete}
-                        />
-                    }
-                    {this.state.pickerType === "chrome" &&
-                        <ChromePicker
-                            color={this.state.color}
-                            onChangeComplete={this.handleChangeComplete}
-                        />
-                    }
-                    {this.state.pickerType === "custom" &&
-                        <CustomColorPicker
-                            onChangeColor={this.handleChangeColor}
-                         />
-                    }
-
-
+                    </Grid>
                 </div>
             </MuiThemeProvider>
         )
