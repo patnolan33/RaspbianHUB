@@ -132,15 +132,31 @@ export class Lights extends React.Component<Props, State> {
             width: 100+'%',
             display: 'flex' as 'flex',
             flexDirection: 'column' as 'column'
-        }
+        };
 
-        const buttonStyle = {
+        let inactiveButtonStyle = {
             width: 100+'%',
             flex: 1,
             borderStyle: 'solid',
-            borderColor: colors.grey800
+            borderColor: colors.grey800,
+        };
+
+        let activeButtonStyle = {
+            width: 100+'%',
+            flex: 1,
+            borderStyle: 'solid',
+            borderColor: colors.grey800,
+            color: colors.cyan700
         }
 
+        let inactiveBackgroundStyle = {
+            height: 100+'%'
+        }
+
+        let activeBackgroundStyle = {
+            height: 100+'%',
+            backgroundColor: colors.grey800
+        }
 
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
@@ -153,7 +169,7 @@ export class Lights extends React.Component<Props, State> {
                                         icon={<i className="material-icons">power_settings_new</i>}
                                         onClick={() => this.handleLightsOn(false)}
                                         label="Off"
-                                        style={buttonStyle}
+                                        style={inactiveButtonStyle}
                                         buttonStyle={{height: 100+'%'}}
                                     />
                                     :
@@ -161,7 +177,7 @@ export class Lights extends React.Component<Props, State> {
                                         icon={<i className="material-icons">power_settings_new</i>}
                                         onClick={() => this.handleLightsOn(true)}
                                         label="On"
-                                        style={buttonStyle}
+                                        style={inactiveButtonStyle}
                                         buttonStyle={{height: 100+'%'}}
                                     />
                                 }
@@ -170,15 +186,15 @@ export class Lights extends React.Component<Props, State> {
                                     icon={<i className="material-icons">lens</i>}
                                     onClick={() => this.handleChangeLightBehavior('solid')}
                                     label="Solid"
-                                    style={buttonStyle}
-                                    buttonStyle={{height: 100+'%'}}
+                                    style={this.state.pythonScript === 'Solid.py' ? activeButtonStyle : inactiveButtonStyle}
+                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? activeBackgroundStyle : inactiveBackgroundStyle}
                                 />
                                 <RaisedButton
                                     icon={<i className="material-icons">hdr_strong</i>}
                                     onClick={() => this.handleChangeLightBehavior('blink')}
                                     label="Blink"
-                                    style={buttonStyle}
-                                    buttonStyle={{height: 100+'%'}}
+                                    style={this.state.pythonScript === 'Solid.py' ? inactiveButtonStyle : activeButtonStyle}
+                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? inactiveBackgroundStyle : activeBackgroundStyle}
                                 />
                             </div>
                         </Col>
