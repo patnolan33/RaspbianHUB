@@ -13,8 +13,8 @@ import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
 var PythonShell = require('python-shell');
 
 type Props = {
+    motionDetected: boolean
 }
-
 
 type State = {
     color?: string,
@@ -68,15 +68,15 @@ export class Lights extends React.Component<Props, State> {
         };
 
         if(this.state.lightsOn === true) {
-	    options = {
-	        mode: "text",
-	        pythonOptions: ["-u"],
-	        scriptPath: "./python/",
-	        args: ['#000000', '-c']
-	    };
+            options = {
+                mode: "text",
+                pythonOptions: ["-u"],
+                scriptPath: "./python/",
+                args: ['#000000', '-c']
+            };
         }
         else {
-	console.log('COLOR: ' + this.state.color);
+	    console.log('COLOR: ' + this.state.color);
 	    options = {
 	        mode: "text",
 	        pythonOptions: ["-u"],

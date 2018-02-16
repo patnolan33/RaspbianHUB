@@ -20,7 +20,6 @@ type State = {
 }
 
 export default class AppContainer extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
 
@@ -32,6 +31,7 @@ export default class AppContainer extends React.Component<Props, State> {
 
   componentDidMount(){
   }
+
 
   changePage = (index: number) => {
     this.setState({selectedPage: index});
