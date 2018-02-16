@@ -5,7 +5,7 @@ const darkMuiTheme = getMuiTheme(darkBaseTheme);
 import * as React from 'react';
 
 import * as request from 'request';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 
 import { WeatherPanel } from './WeatherPanel';
 // import { Grid, Col } from 'react-bootstrap';
@@ -15,6 +15,7 @@ type Props = {
 
 
 type State = {
+    USState?: string,
     city?: string,
     apiKey?: string,
     currentWeather?: any,
@@ -26,23 +27,32 @@ export class Weather extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
+
+        // TODO: Use weather underground instead, their API looks more full featured.
+        //          - Look into search bar (see: https://github.com/dstock48/weathrly for an example)
+        //              - I'll want to switch between cities
+        //          - Figure out how webcams can be shown. Maybe a button to trigger webcam view from the detailed
+        //              view of a day? I.e. default to 10 day forecast, and when clicked into the day, give
+        //              summary and, when available, hourly and webcam views
         this.state = {
-            city: "district of columbia",
-            apiKey: '630019d2e0a9a5e84ed405126d17b006',
+            USState: "DC",
+            city: "Washington",
+            apiKey: 'c932c6a292907528',
             currentWeather: {},
             days: {}
         }
     }
 
     componentDidMount() {
-        this.getCurrentData();
-        this.getHourlyData();
+        this.getWeatherData();
     }
 
-    getCurrentData = () => {
+    getWeatherData = () => {
         let apiKey = this.state.apiKey;
+        let usState = this.state.USState;
         let city = this.state.city;
-        let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial&precipitation=yes`
+        // let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial&precipitation=yes`
+        let url = 'http://api.wunderground.com/api/'+ apiKey +'/forecast10day/hourly10day/geolookup/conditions/q/' + usState + '/' + city + '.json';
         request(url, function (err: any, response: any, body: any) {
             if(err){
                 console.log('error:', err);
@@ -55,47 +65,16 @@ export class Weather extends React.Component<Props, State> {
         }.bind(this));
     }
 
-    getHourlyData = () => {
-        let apiKey = this.state.apiKey;
-        let city = this.state.city;
-        let url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=imperial`
-        request(url, function (err: any, response: any, body: any) {
-            if(err){
-                console.log('error:', err);
-            } else {
-                let weather = JSON.parse(body);
-                console.log("Hourly WEATHER: ");
-                console.log(weather);
-
-                this.groupWeatherByDay(weather.list);
-
-            }
-        }.bind(this));
-    }
-
-    groupWeatherByDay = (list: any[]) => {
-        const days: any = {} // use Map as need we to maintain insertion order
-
-        list.forEach( (entry) => {
-            // const day = moment(entry.dt*1000).local().format("dddd MMMM Do YYYY");
-            const day = moment(entry.dt*1000).local().format("dddd");
-            if( !days[day] ) {
-                days[day] = [];
-            }
-            days[day].push(entry);
-        })
-
-        // console.log("DAYS: ");
-        // console.log(days);
-        this.setState({days});
-    }
-
     render() {
         const height = window.screen.height;
         const width = window.screen.width;
 
         const weatherPanels = Object.keys(this.state.days).map( (day, index) => (
-            <WeatherPanel key={day} day={day} currentWeatherData={this.state.currentWeather} hourlyWeatherData={this.state.days[day]}/>
+            <WeatherPanel key={day}
+                day={day}
+                currentWeatherData={this.state.currentWeather}
+                hourlyWeatherData={this.state.days[day]}
+            />
         ));
 
         return(

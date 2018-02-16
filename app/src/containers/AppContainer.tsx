@@ -26,15 +26,11 @@ export default class AppContainer extends React.Component<Props, State> {
 
     this.state = {
       openDrawer: false,
-      selectedPage: 2
+      selectedPage: 0
     }
   }
 
   componentDidMount(){
-  }
-
-  handleDrawerAction = (action: string) => {
-    console.log("Drawer action: " + action);
   }
 
   changePage = (index: number) => {

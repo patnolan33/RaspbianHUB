@@ -1,0 +1,12 @@
+
+.ForecastDetail {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 20px 40px;
+   /* background-color: #EFEFEF; */
+   background-color: #424242;
+  position: relative;
+   /* border-left: 1px solid #c3c3c3; */
+   border-left: 1px solid #424242
+}

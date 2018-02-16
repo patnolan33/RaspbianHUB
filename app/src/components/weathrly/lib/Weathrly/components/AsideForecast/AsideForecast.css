@@ -1,0 +1,75 @@
+.AsideForecast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  width: 33%;
+  max-width: 450px;
+  /*background: linear-gradient(#434672, #637981);
+  background: linear-gradient(#64D5E4, #A9E4BE);
+  background: linear-gradient(#A9DBEE, #4F8EB3);
+  background: linear-gradient(#B130DE, #463E9C);*/
+  background: linear-gradient(#E86868, #F3D766);
+  padding: 20px;
+  color: #000;
+}
+
+.top,
+.middle,
+.bottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.city {
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.date,
+.current-time {
+  font-weight: 300;
+  text-align: center;
+}
+
+.current-time {
+  font-size: 10px;
+}
+
+.current-temp {
+  position: relative;
+  font-size: 70px;
+}
+
+.weather-icon {
+  width: 50px;
+  margin-bottom: 20px;
+}
+
+.deg {
+  position: absolute;
+  top: 10px;
+  vertical-align: text-top;
+  font-size: .6em;
+}
+
+.weather-condition {
+  font-size: 18px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.hi-low {
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.weather-summary {
+  width: 88%;
+  text-align: center;
+  font-size: 14px;
+}

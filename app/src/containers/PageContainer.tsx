@@ -4,7 +4,8 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 const darkMuiTheme = getMuiTheme(darkBaseTheme);
 import * as React from 'react';
 
-import { Weather } from '../components/Weather';
+// import { Weather } from '../components/Weather';
+import { Weathrly } from '../components/weathrly/lib/Weathrly/Weathrly';
 import { Lights } from '../components/Lights';
 import { Calendar } from '../components/Calendar';
 
@@ -35,8 +36,9 @@ export class PageContainer extends React.Component<Props, State> {
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div style={parentStyle}>
+                        {/* <Weather /> */}
                     {this.props.activePage === 0 &&
-                        <Weather />
+                        <Weathrly />
                     }
 
                     {this.props.activePage === 1 &&

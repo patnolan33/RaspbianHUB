@@ -1,0 +1,162 @@
+* {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  font-family: 'Avenir Next', sans-serif;
+  background-color: #EFEFEF;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+#app {
+
+}
+
+/* @media (max-width: 1300px) {
+  .AsideForecast .city {
+    font-size: 30px;
+  }
+
+  .AsideForecast .weather-summary {
+    font-size: 16px;
+  }
+  .current-time {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .weather-summary {
+    width: 100%;
+  }
+
+  .TenDayRow {
+  }
+  .hi-low-temp {
+  }
+} */
+
+
+/* @media (max-width: 1024px) {
+  .Weathrly {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .DetailList {
+    position: static;
+  }
+
+  .AsideForecast {
+    width: 100vw;
+    max-width: 100%;
+  }
+
+  .SearchInput {
+    align-self: center;
+    height: 42px;
+    margin-bottom: 20px;
+  }
+
+  .search-input {
+    width: 350px;
+  }
+
+  .city {
+    font-size: 30px;
+  }
+
+  .weather-summary {
+    font-size: 16px;
+  }
+
+  .TenDayRow {
+    font-size: 20px;
+  }
+
+  .hi-low-temp {
+    font-size: 20px;
+  }
+
+  .row-sec {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    margin-left: 30px;
+  }
+
+  .hourly-icon {
+    width: 45px;
+    margin: 0;
+  }
+
+  .hi-low-temp {
+    font-size: 24px;
+    min-width: 50px;
+  }
+
+} */
+
+/* @media (max-width: 550px) { */
+
+  .ForecastDetail {
+    padding: 20px 10px;
+  }
+
+  .TenDayRow {
+    font-size: 14px;
+  }
+  .HourlyRow {
+    font-size: 16px;
+  }
+  .hourly-temp {
+    font-size: 20px;
+  }
+
+  .condition {
+  max-width: 105px;
+}
+
+  .hi-low-temp {
+    font-size: 18px;
+  }
+
+  .SearchInput {
+    width: 35%
+  }
+
+  .search-input {
+    width: 100%;
+  }
+
+  .hourly-icon {
+    margin: 0;
+  }
+
+  .month-date {
+    min-width: 50px;
+  }
+
+  .row-sec {
+    margin-left: 25px;
+  }
+
+  .ErrorStyle .search-input {
+    width: 240px;
+  }
+
+  .emoji {
+    font-size: 80px;
+    margin-bottom: 0;
+  }
+/* } */
