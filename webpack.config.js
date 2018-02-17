@@ -1,4 +1,5 @@
 var path = require("path");
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 var config = {
   /*
@@ -33,8 +34,13 @@ var config = {
   },
 
   externals: {
-    child_process: 'child_process'
+    child_process: 'child_process',
+    repl: 'repl'
   },
+
+  // plugins: [
+  //   new UglifyJsPlugin()
+  // ],
 
   performance: { hints: false },
   node: {
@@ -58,7 +64,7 @@ var config = {
         test: /\.js$/,
         loader: "babel-loader",
         exclude: /node_modules/,
-        include: path.join(__dirname, 'src')
+        include: [path.join(__dirname, 'src')]
       },
       {
         test: /\.css$/,

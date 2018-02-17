@@ -34,7 +34,8 @@ export class PageContainer extends React.Component<Props, State> {
             motionDetected: false
         }
 
-        this.board = new five.Board({io: new raspi()});
+        this.board = new five.Board({repl: false});
+        this.board.io = new raspi();
     }
 
     componentDidMount(){
