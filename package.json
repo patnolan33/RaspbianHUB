@@ -9,7 +9,7 @@
   },
   "scripts": {
     "version": "electron -v",
-    "start": "./node_modules/electron-prebuilt/dist/electron .",
+    "start": "sudo ./node_modules/electron-prebuilt/dist/electron .",
     "build:prod": "webpack --env.prod",
     "prepare": "node ./node_modules/patch-package/index.js"
   },
@@ -31,6 +31,7 @@
     "material-ui": "0.20.0",
     "moment": "^2.20.1",
     "net": "^1.0.2",
+    "node-loader": "^0.6.0",
     "onoff": "1.2.0",
     "python-shell": "^0.4.0",
     "react": "15.4.2",
@@ -38,7 +39,9 @@
     "react-color": "^2.13.8",
     "react-dom": "15.4.2",
     "request": "^2.83.0",
+    "rpi-ws281x-native": "^0.8.2",
     "style-loader": "0.18.2",
+    "sudo-prompt": "^8.1.0",
     "tls": "0.0.1",
     "ts-loader": "3.2.0",
     "typescript": "2.6.2",

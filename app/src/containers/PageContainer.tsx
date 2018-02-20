@@ -9,7 +9,7 @@ import { Weathrly } from '../components/weathrly/lib/Weathrly/Weathrly';
 import { Lights } from '../components/Lights';
 import { Calendar } from '../components/Calendar';
 
-var Gpio = require('onoff').Gpio;
+//var Gpio = require('onoff').Gpio;
 
 
 type Props = {
@@ -22,14 +22,14 @@ type State = {
 }
 
 export class PageContainer extends React.Component<Props, State> {
-    motionSensor: any;
+    //motionSensor: any;
     constructor(props: Props) {
         super(props);
 
         this.state = {
             motionDetected: false
         }
-        this.motionSensor = new Gpio(4, 'in', 'both');
+        //this.motionSensor = new Gpio(4, 'in', 'both');
     }
 
     componentDidMount(){

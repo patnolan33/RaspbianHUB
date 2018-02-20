@@ -48,7 +48,7 @@ export class CustomColorPicker extends React.Component<Props, State> {
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div style={{overflow: 'hidden', maxHeight: height}}>
-                    <div style={{height: height, overflowY: 'scroll'}}>
+                    <div style={{height: height, overflowY: 'scroll', marginRight: -22+'px'}}>
                         <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
                             {!this.state.showSelections ?
                                 <Col xs={12} md={12} style={{paddingLeft: 0, paddingRight: 0}}  >

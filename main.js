@@ -14,10 +14,12 @@ function createWindow () {
   const browserOptions = {
     width: 50000,
     height: 50000,
-    icon:'public/img/logo.png'
+    icon:'public/img/logo.png',
+    frame: true
   }
   // Create the browser window.
   mainWindow = new BrowserWindow(browserOptions);
+//  mainWindow.setMenu(null);
 
   // and load the index.html of the app.
   mainWindow.loadURL('file://' + __dirname + '/html/index.html');

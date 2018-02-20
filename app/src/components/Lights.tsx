@@ -20,11 +20,14 @@ type State = {
     color?: string,
     pickerType?: "swatch" | "chrome" | "custom",
     pythonScript?: string,
-    lightsOn?: boolean
+    lightsOn?: boolean,
+    numLEDs?: number,
+    brightness?: number
 }
 
 export class Lights extends React.Component<Props, State> {
     pythonShell: any;
+    pixelData: Uint32Array;
 
     constructor(props: Props) {
         super(props);
@@ -33,7 +36,9 @@ export class Lights extends React.Component<Props, State> {
             color: '#000000',
             pickerType: 'custom',
             pythonScript: 'Solid.py',
-            lightsOn: false
+            lightsOn: false,
+	    numLEDs: 30,
+	    brightness: 128
         }
 
         let options = {
@@ -84,7 +89,7 @@ export class Lights extends React.Component<Props, State> {
 	        args: [this.state.color, '-c']
 	    };
         }
-
+console.log(this.state.pythonScript);
         this.pythonShell = PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
             if(err){
                 console.log(err);
@@ -123,6 +128,7 @@ export class Lights extends React.Component<Props, State> {
         this.runPythonScript();
     }
 
+   
     render() {
 
         const height = window.screen.height;
@@ -162,7 +168,7 @@ export class Lights extends React.Component<Props, State> {
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div>
                     <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
-                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-56+'px', display: 'flex'}}>
+                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
                             <div style={parentStyle}>
                                 {this.state.lightsOn === true ?
                                     <RaisedButton
@@ -199,7 +205,7 @@ export class Lights extends React.Component<Props, State> {
                             </div>
                         </Col>
 
-                        <Col xs={10} md={10} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800}}>
+                        <Col xs={10} md={10} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800, overflow: 'hidden'}}>
                             {this.state.pickerType === "swatch" &&
                                 <SwatchesPicker
                                     color={this.state.color}

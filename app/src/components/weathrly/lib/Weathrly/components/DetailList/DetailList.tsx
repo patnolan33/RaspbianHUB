@@ -93,7 +93,7 @@ export class DetailList extends React.Component<Props, State> {
         <nav className="list-tabs">
           {tabs}
         </nav>
-        <section className="list">
+        <section className="list" style={{marginRight: -22+'px', marginBottom: -22+'px'}}>
           {dataView}
         </section>
       </section>

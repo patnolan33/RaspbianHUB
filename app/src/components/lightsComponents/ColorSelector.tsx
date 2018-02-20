@@ -109,21 +109,23 @@ export class ColorSelector extends React.Component<Props, State> {
 
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
-                <Grid fluid style={{paddingLeft: 0, paddingRight: 0, width: 100+'%'}}>
-                    <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0}}>
-                        <RaisedButton
-                            icon={<i className="material-icons">keyboard_arrow_left</i>}
-                            onClick={this.props.onBack}
-                            style={{height: height, color: this.state.arrowColor, width: 100+'%'}}
-                            backgroundColor={this.state.buttonColor}
-                        />
-                    </Col>
-                    <Col xs={11} md={11} style={{overflow: 'hidden', paddingRight: 0, paddingLeft: 0, left: 20+'px'}}>
-                        <div style={{height: height-50+'px', overflowY: 'scroll', width: 100+'%'}}>
-                            {colorChoices}
-                        </div>
-                    </Col>
-                </Grid>
+		<div style={{marginRight: -18+'px'}}>
+		        <Grid fluid style={{paddingLeft: 0, paddingRight: 0, width: 100+'%'}}>
+		            <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0}}>
+		                <RaisedButton
+		                    icon={<i className="material-icons">keyboard_arrow_left</i>}
+		                    onClick={this.props.onBack}
+		                    style={{height: height, color: this.state.arrowColor, width: 100+'%'}}
+		                    backgroundColor={this.state.buttonColor}
+		                />
+		            </Col>
+		            <Col xs={11} md={11} style={{overflow: 'hidden', paddingRight: 0, paddingLeft: 0, left: 20+'px'}}>
+		                <div style={{height: height-50+'px', overflowY: 'scroll', width: 100+'%'}}>
+		                    {colorChoices}
+		                </div>
+		            </Col>
+		        </Grid>
+		</div>
             </MuiThemeProvider>
         )
 

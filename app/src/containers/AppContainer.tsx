@@ -25,7 +25,7 @@ export default class AppContainer extends React.Component<Props, State> {
 
     this.state = {
       openDrawer: false,
-      selectedPage: 0
+      selectedPage: 2
     }
   }
 

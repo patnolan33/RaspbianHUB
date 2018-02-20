@@ -34,8 +34,7 @@ var config = {
   },
 
   externals: {
-    child_process: 'child_process',
-    repl: 'repl'
+    child_process: 'child_process'
   },
 
   // plugins: [
@@ -72,6 +71,10 @@ var config = {
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000'
+      },
+      {
+        test: /\.node$/,
+        use: 'node-loader'
       }
     ]
   }
