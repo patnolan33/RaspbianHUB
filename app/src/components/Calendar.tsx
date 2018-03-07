@@ -28,7 +28,7 @@ export class Calendar extends React.Component<Props, State> {
 
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
-                <webview id="foo" src={"https://calendar.google.com/"} style={parentStyle}></webview>
+                <webview id="calendar" src={"https://calendar.google.com/"} style={parentStyle}></webview>
             </MuiThemeProvider>
         )
 

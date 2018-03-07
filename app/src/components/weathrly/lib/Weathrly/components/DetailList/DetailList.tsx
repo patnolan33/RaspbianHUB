@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { HourlyRow } from '../HourlyRow/HourlyRow';
 import { TenDayRow } from '../TenDayRow/TenDayRow';
+import { WebCamPanel } from '../WebCamPanel/WebCamPanel';
 import colorCondition from '../../../utils/colorCondition';
 import { getRandomKey } from '../../../utils/helperFunctions';
 import './DetailList.css';
@@ -50,7 +51,12 @@ export class DetailList extends React.Component<Props, State> {
           key={getRandomKey()}
           hourData={hour}
           data={this.props.data}
-        />);
+      />);
+    const webCamData = this.props.data.webcams.map((cam:any) =>
+      <WebCamPanel
+        key={getRandomKey()}
+        data={cam}
+      />);
 
     let borderColor = { borderColor: accentColor };
 
@@ -60,6 +66,7 @@ export class DetailList extends React.Component<Props, State> {
 
     let hourlyTab;
     let tenDayTab;
+    let webCamTab;
     let twentyFourTab;
     let tabs;
     let dataView;
@@ -68,22 +75,33 @@ export class DetailList extends React.Component<Props, State> {
       case 'Hourly':
         hourlyTab = <a key="tab-1" style={borderColor} onClick={this.props.handler} className="tab tab-active">Hourly</a>;
         tenDayTab = <a key="tab-2" onClick={this.props.handler} className="tab">10 Day</a>;
-        twentyFourTab = <a key="tab-3" className="tab">{this.props.selectedMonth} {this.props.selectedDay}</a>;
+        webCamTab = <a key="tab-3" onClick={this.props.handler} className="tab">Webcams</a>;
+        twentyFourTab = <a key="tab-4" className="tab">{this.props.selectedMonth} {this.props.selectedDay}</a>;
         dataView = sevenHourData;
-        tabs = [hourlyTab, tenDayTab];
+        tabs = [hourlyTab, tenDayTab, webCamTab];
         break;
       case '10 Day':
         hourlyTab = <a key="tab-1" onClick={this.props.handler} className="tab">Hourly</a>;
         tenDayTab = <a key="tab-2" style={borderColor} onClick={this.props.handler} className="tab tab-active">10 Day</a>;
+        webCamTab = <a key="tab-3" onClick={this.props.handler} className="tab">Webcams</a>;
         dataView = tenDayData;
-        tabs = [hourlyTab, tenDayTab];
+        tabs = [hourlyTab, tenDayTab, webCamTab];
+        break;
+      case 'Webcams':
+        hourlyTab = <a key="tab-1" onClick={this.props.handler} className="tab">Hourly</a>;
+        tenDayTab = <a key="tab-2" onClick={this.props.handler} className="tab">10 Day</a>;
+        webCamTab = <a key="tab-3" style={borderColor} onClick={this.props.handler} className="tab tab-active">Webcams</a>;
+        twentyFourTab = <a key="tab-4" className="tab">{this.props.selectedMonth} {this.props.selectedDay}</a>;
+        dataView = webCamData;
+        tabs = [hourlyTab, tenDayTab, webCamTab];
         break;
       case '24 Hourly':
         hourlyTab = <a key="tab-1" onClick={this.props.handler} className="tab">Hourly</a>;
         tenDayTab = <a key="tab-2" onClick={this.props.handler} className="tab">10 Day</a>;
-        twentyFourTab = <a key="tab-3" style={borderColor} className="tab tab-active">{this.props.selectedMonth} {this.props.selectedDay}</a>;
+        webCamTab = <a key="tab-3" onClick={this.props.handler} className="tab">Webcams</a>;
+        twentyFourTab = <a key="tab-4" style={borderColor} className="tab tab-active">{this.props.selectedMonth} {this.props.selectedDay}</a>;
         dataView = twentyFourData;
-        tabs = [hourlyTab, tenDayTab, twentyFourTab];
+        tabs = [hourlyTab, tenDayTab, webCamTab, twentyFourTab];
         break;
       default:
     }

@@ -12,6 +12,7 @@ function City(obj: any) {
   this.lowTemp = obj.forecast.simpleforecast.forecastday[0].low.fahrenheit;
   this.date = obj.forecast.simpleforecast.forecastday[0].date; // date object
   this.forecastDisc = obj.forecast.txt_forecast.forecastday[0].fcttext;
+  this.webcams = obj.webcams;
   //  Hourly weather data
   this.sevenHourData = obj.hourly_forecast.slice(0, 7).map((hour: any) => {
     return {

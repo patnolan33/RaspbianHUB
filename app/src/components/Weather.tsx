@@ -52,7 +52,7 @@ export class Weather extends React.Component<Props, State> {
         let usState = this.state.USState;
         let city = this.state.city;
         // let url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=imperial&precipitation=yes`
-        let url = 'http://api.wunderground.com/api/'+ apiKey +'/forecast10day/hourly10day/geolookup/conditions/q/' + usState + '/' + city + '.json';
+        let url = 'http://api.wunderground.com/api/'+ apiKey +'/forecast10day/hourly10day/geolookup/conditions/webcams/q/' + usState + '/' + city + '.json';
         request(url, function (err: any, response: any, body: any) {
             if(err){
                 console.log('error:', err);

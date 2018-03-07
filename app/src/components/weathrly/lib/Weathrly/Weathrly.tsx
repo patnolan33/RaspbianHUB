@@ -71,12 +71,15 @@ export class Weathrly extends React.Component<Props, State> {
   }
 
   updateWeatherData(city: string) {
-    const url = `http://api.wunderground.com/api/${this.key}/astronomy/conditions/hourly/forecast/forecast10day/hourly10day/geolookup/q/${city}.json`;  // eslint-disable-line
-
+    const url = `http://api.wunderground.com/api/${this.key}/astronomy/conditions/hourly/forecast/forecast10day/hourly10day/geolookup/webcams/q/${city}.json`;  // eslint-disable-line
     if (city !== 'no location') {
       fetch(url)
       .then(res => res.json())
       .then((data) => {
+
+
+    console.log(data);
+
         const cityData = new (City as any)(data);
         this.setState({ cityData, isNotFound: false });
       })
@@ -91,6 +94,7 @@ export class Weathrly extends React.Component<Props, State> {
 
   render() {
     const { cityData, tabName, isNotFound, selectedDay, selectedMonth, trie } = this.state;
+
 
     if (!localStorage.location) {
       return (

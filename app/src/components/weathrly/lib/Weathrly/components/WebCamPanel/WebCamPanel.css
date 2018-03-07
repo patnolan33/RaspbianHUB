@@ -1,0 +1,8 @@
+.WebCamPanel {
+  display: flex;
+  align-items: center;
+  padding: 20px 8px;
+  /* color: #979797; */
+  color: #ffffff;
+  font-size: 20px;
+}
