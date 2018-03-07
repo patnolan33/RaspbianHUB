@@ -2,11 +2,9 @@ import time
 
 from gpiozero import MotionSensor
 
-pir = MotionSensor(4) 
+pir = MotionSensor(4)
 
-counter = 1
-while True:
-	if pir.motion_detected:
-		print 'Motion Detected: ',  counter
-		counter = counter + 1
-	
+pir.when_motion = print 'Motion detected!'
+pir.when_no_motion = print '...end of motion...'
+
+pause()

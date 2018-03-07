@@ -13,7 +13,6 @@ import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
 var PythonShell = require('python-shell');
 
 type Props = {
-    motionDetected: boolean
 }
 
 type State = {
@@ -22,11 +21,14 @@ type State = {
     pythonScript?: string,
     lightsOn?: boolean,
     numLEDs?: number,
-    brightness?: number
+    brightness?: number,
+    motionDetected?: boolean,
+    motionEnabled?: boolean
 }
 
 export class Lights extends React.Component<Props, State> {
-    pythonShell: any;
+    pythonShell_Light: any;
+    pythonShell_Motion: any;
     pixelData: Uint32Array;
 
     constructor(props: Props) {
@@ -37,65 +39,84 @@ export class Lights extends React.Component<Props, State> {
             pickerType: 'custom',
             pythonScript: 'Solid.py',
             lightsOn: false,
-	    numLEDs: 30,
-	    brightness: 128
+	        numLEDs: 30,
+            brightness: 128,
+            motionDetected: false,
+            motionEnabled: true
         }
 
-        let options = {
-            mode: "text",
-            pythonOptions: ["-u"],
-	    scriptPath: "./python/",
-	    args: ['#000000', '-c']
-        };
-	this.pythonShell = PythonShell.run('Solid.py', options, function(err: any, results: any) {
-            if(err){
-                console.log(err);
-                throw err;
-            }
+        // let options = {
+        //     mode: "text",
+        //     pythonOptions: ["-u"],
+	    //     scriptPath: "./python/",
+	    //     args: ['#000000', '-c']
+        // };
+	    // this.pythonShell_Light = PythonShell.run('Solid.py', options, function(err: any, results: any) {
+        //     if(err){
+        //         console.log(err);
+        //         throw err;
+        //     }
 
-            console.log(results);
-        }.bind(this));
+        //     console.log(results);
+        // }.bind(this));
+        this.runPythonScript_Lights();
+
+        // Motion detect:
+        this.runPythonScript_Motion();
     }
 
     componentDidMount() {
     }
 
-    runPythonScript = () => {
-	// Kill old python script:
-	this.pythonShell.childProcess.kill('SIGINT');
-	this.pythonShell = null;
-
+    runPythonScript_Motion = () => {
         let options = {
             mode: "text",
             pythonOptions: ["-u"],
-	    scriptPath: "./python/",
-	    args: [this.state.color, '-c']
+	        scriptPath: "./python/"
         };
-
-        if(this.state.lightsOn === true) {
-            options = {
-                mode: "text",
-                pythonOptions: ["-u"],
-                scriptPath: "./python/",
-                args: ['#000000', '-c']
-            };
-        }
-        else {
-	    console.log('COLOR: ' + this.state.color);
-	    options = {
-	        mode: "text",
-	        pythonOptions: ["-u"],
-	        scriptPath: "./python/",
-	        args: [this.state.color, '-c']
-	    };
-        }
-console.log(this.state.pythonScript);
-        this.pythonShell = PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
+        this.pythonShell_Motion = PythonShell.run('DetectMotion.py', options, function(err: any, results: any) {
             if(err){
                 console.log(err);
                 throw err;
             }
 
+            console.log("Motion detection results: ");
+            console.log(results);
+            // TODO: Set motion state true/false
+
+        }.bind(this));
+    }
+
+    runPythonScript_Lights = () => {
+        // Kill old python script:
+        if(this.pythonShell_Light) {
+            this.pythonShell_Light.childProcess.kill('SIGINT');
+            this.pythonShell_Light = null;
+        }
+
+        let options = {
+            mode: "text",
+            pythonOptions: ["-u"],
+            scriptPath: "./python/",
+            args: ['#000000', '-c']
+        };
+
+        if(this.state.lightsOn === false && (this.state.motionDetected && this.state.motionEnabled)) {
+            options = {
+                mode: "text",
+                pythonOptions: ["-u"],
+                scriptPath: "./python/",
+                args: [this.state.color, '-c']
+            };
+        }
+
+        this.pythonShell_Light = PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
+            if(err){
+                console.log(err);
+                throw err;
+            }
+
+            console.log("Lights results: ");
             console.log(results);
         }.bind(this));
     }
@@ -125,10 +146,10 @@ console.log(this.state.pythonScript);
         this.setState({lightsOn});
 
         // Run python script to turn on lights with script:
-        this.runPythonScript();
+        this.runPythonScript_Lights();
     }
 
-   
+
     render() {
 
         const height = window.screen.height;

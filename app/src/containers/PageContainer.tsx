@@ -9,8 +9,6 @@ import { Weathrly } from '../components/weathrly/lib/Weathrly/Weathrly';
 import { Lights } from '../components/Lights';
 import { Calendar } from '../components/Calendar';
 
-//var Gpio = require('onoff').Gpio;
-
 
 type Props = {
     activePage?: number
@@ -18,7 +16,6 @@ type Props = {
 
 
 type State = {
-    motionDetected?: boolean
 }
 
 export class PageContainer extends React.Component<Props, State> {
@@ -27,41 +24,10 @@ export class PageContainer extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            motionDetected: false
         }
-        //this.motionSensor = new Gpio(4, 'in', 'both');
     }
 
     componentDidMount(){
-        this.setupMotionSensor();
-    }
-
-    setupMotionSensor = () => {
-        // let tmpRet = this.board.on('ready', () => {
-        //     console.log('board is ready');
-
-        //     // Create a new `motion` hardware instance.
-        //     const motion = new five.Motion(4); //a PIR is wired on pin 7 (GPIO 4)
-
-        //     // 'calibrated' occurs once at the beginning of a session
-        //     motion.on('calibrated', () => {
-        //         console.log('calibrated');
-        //     });
-
-        //     // Motion detected
-        //     motion.on('motionstart', () => {
-        //         console.log('motionstart');
-        //         this.setState({motionDetected: true});
-        //     });
-
-        //     // 'motionend' events
-        //     motion.on('motionend', () => {
-        //         console.log('motionend');
-        //         this.setState({motionDetected: false});
-        //     });
-        // });
-
-        // console.log("BOARD ONREADY RETURN: " + tmpRet);
     }
 
     render() {
@@ -83,9 +49,7 @@ export class PageContainer extends React.Component<Props, State> {
                     }
 
                     {this.props.activePage === 2 &&
-                        <Lights
-                            motionDetected={this.state.motionDetected}
-                         />
+                        <Lights />
                     }
                 </div>
             </MuiThemeProvider>
