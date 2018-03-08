@@ -1,6 +1,9 @@
 var net = require('net');
+var raspio = require('raspi-io');
 var five = require("johnny-five");
-var board = new five.Board();
+var board = new five.Board({
+  io: new raspi()
+});
 
 function makeTCPRequest(messagType: string, messageData: string) {
   let socket = new net.Socket();
@@ -39,7 +42,7 @@ function setupTCPSocket(socket: any) {
 board.on("ready", function() {
 
   // Create a new `motion` hardware instance.
-  var motion = new five.Motion(4);
+  var motion = new five.Motion(7);
 
   // "calibrated" occurs once, at the beginning of a session,
   motion.on("calibrated", function() {
