@@ -19,7 +19,8 @@ type Props = {
 
 type State = {
     tcpServer?: any,
-    tcpSockets?: any[]
+    tcpSockets?: any[],
+    motionDetected?: boolean
 }
 
 export class PageContainer extends React.Component<Props, State> {
@@ -29,7 +30,8 @@ export class PageContainer extends React.Component<Props, State> {
 
         this.state = {
             tcpServer: null,
-            tcpSockets: []
+            tcpSockets: [],
+            motionDetected: false
         }
     }
 
@@ -58,7 +60,7 @@ export class PageContainer extends React.Component<Props, State> {
             // 'data' is an event that means that a message was just sent by the client application
             socket.on('data', function (msg_sent: any) {
                 // console.log("Data from socket: " + msg_sent);
-                let jsonData: TCPReturnType = JSON.parse(msg_sent);
+                let jsonData: MotionDetectType = JSON.parse(msg_sent);
                 this.parseTCPClientData(jsonData);
             }.bind(this));
             // Use splice to get rid of the socket that is ending.
@@ -85,9 +87,10 @@ export class PageContainer extends React.Component<Props, State> {
 
     }
 
-    parseTCPClientData = (jsonData: TCPReturnType) => {
+    parseTCPClientData = (jsonData: MotionDetectType) => {
         console.log("ParseTCPClientData: ");
         console.log(jsonData);
+        this.setState({motionDetected: jsonData.turnOn})
     }
 
     render() {
@@ -109,7 +112,9 @@ export class PageContainer extends React.Component<Props, State> {
                     }
 
                     {this.props.activePage === 2 &&
-                        <Lights />
+                        <Lights
+                            motionDetected={this.state.motionDetected}
+                         />
                     }
                 </div>
             </MuiThemeProvider>

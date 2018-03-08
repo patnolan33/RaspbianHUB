@@ -13,6 +13,7 @@ import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
 var PythonShell = require('python-shell');
 
 type Props = {
+    motionDetected: boolean
 }
 
 type State = {
@@ -22,7 +23,6 @@ type State = {
     lightsOn?: boolean,
     numLEDs?: number,
     brightness?: number,
-    motionDetected?: boolean,
     motionEnabled?: boolean
 }
 
@@ -41,50 +41,13 @@ export class Lights extends React.Component<Props, State> {
             lightsOn: false,
 	        numLEDs: 30,
             brightness: 128,
-            motionDetected: false,
             motionEnabled: true
         }
 
-        // let options = {
-        //     mode: "text",
-        //     pythonOptions: ["-u"],
-	    //     scriptPath: "./python/",
-	    //     args: ['#000000', '-c']
-        // };
-	    // this.pythonShell_Light = PythonShell.run('Solid.py', options, function(err: any, results: any) {
-        //     if(err){
-        //         console.log(err);
-        //         throw err;
-        //     }
-
-        //     console.log(results);
-        // }.bind(this));
         this.runPythonScript_Lights();
-
-        // Motion detect:
-        this.runPythonScript_Motion();
     }
 
     componentDidMount() {
-    }
-
-    runPythonScript_Motion = () => {
-        let options = {
-            mode: "text",
-            pythonOptions: ["-u"],
-	        scriptPath: "./python/"
-        };
-        this.pythonShell_Motion = PythonShell.run('DetectMotion.py', options, function(err: any, results: any) {
-            if(err){
-                console.log(err);
-                throw err;
-            }
-
-            console.log("Motion detection results: ");
-            console.log(results);
-            // TODO: Set motion state true/false
-
-        }.bind(this));
     }
 
     runPythonScript_Lights = () => {
@@ -101,8 +64,8 @@ export class Lights extends React.Component<Props, State> {
             args: ['#000000', '-c']
         };
 
-// && (this.state.motionDetected && this.state.motionEnabled)
-        if(this.state.lightsOn === false) {
+        if(this.state.lightsOn === false &&
+            (this.props.motionDetected === true && this.state.motionEnabled === true)) {
             options = {
                 mode: "text",
                 pythonOptions: ["-u"],
@@ -156,7 +119,7 @@ export class Lights extends React.Component<Props, State> {
         const height = window.screen.height;
         // const width = window.screen.width;
 
-        const parentStyle = {
+        const bar_parentStyle = {
             width: 100+'%',
             display: 'flex' as 'flex',
             flexDirection: 'column' as 'column'
@@ -186,43 +149,35 @@ export class Lights extends React.Component<Props, State> {
             backgroundColor: colors.grey800
         }
 
+        let activeLabelStyle = {
+            color: colors.cyan700
+        }
+
+
         return(
             <MuiThemeProvider muiTheme={darkMuiTheme}>
                 <div>
                     <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
-                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
-                            <div style={parentStyle}>
-                                {this.state.lightsOn === true ?
-                                    <RaisedButton
-                                        icon={<i className="material-icons">power_settings_new</i>}
-                                        onClick={() => this.handleLightsOn(false)}
-                                        label="Off"
-                                        style={inactiveButtonStyle}
-                                        buttonStyle={{height: 100+'%'}}
-                                    />
-                                    :
-                                    <RaisedButton
-                                        icon={<i className="material-icons">power_settings_new</i>}
-                                        onClick={() => this.handleLightsOn(true)}
-                                        label="On"
-                                        style={inactiveButtonStyle}
-                                        buttonStyle={{height: 100+'%'}}
-                                    />
-                                }
+
+                        { /* Left bar */ }
+                        <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
+                            <div style={bar_parentStyle}>
+                                <RaisedButton
+                                    icon={this.state.lightsOn ? <i className="material-icons">highlight_off</i> : <i className="material-icons">power_settings_new</i>}
+                                    onClick={() => this.handleLightsOn(!this.state.lightsOn)}
+                                    label={this.state.lightsOn ? "Off" : "On"}
+                                    labelStyle={this.state.lightsOn ? activeLabelStyle : {}}
+                                    style={this.state.lightsOn ? activeButtonStyle : inactiveButtonStyle}
+                                    buttonStyle={this.state.lightsOn ? activeBackgroundStyle : inactiveBackgroundStyle}
+                                />
 
                                 <RaisedButton
-                                    icon={<i className="material-icons">lens</i>}
-                                    onClick={() => this.handleChangeLightBehavior('solid')}
-                                    label="Solid"
-                                    style={this.state.pythonScript === 'Solid.py' ? activeButtonStyle : inactiveButtonStyle}
-                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? activeBackgroundStyle : inactiveBackgroundStyle}
-                                />
-                                <RaisedButton
-                                    icon={<i className="material-icons">hdr_strong</i>}
-                                    onClick={() => this.handleChangeLightBehavior('blink')}
-                                    label="Blink"
-                                    style={this.state.pythonScript === 'Solid.py' ? inactiveButtonStyle : activeButtonStyle}
-                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? inactiveBackgroundStyle : activeBackgroundStyle}
+                                    icon={this.state.motionEnabled ? <i className="material-icons">clear</i> : <i className="material-icons">done</i>}
+                                    onClick={() => this.setState({motionEnabled: !this.state.motionEnabled})}
+                                    label={"Motion"}
+                                    labelStyle={this.state.motionEnabled ? activeLabelStyle : {}}
+                                    style={this.state.motionEnabled ? activeButtonStyle : inactiveButtonStyle}
+                                    buttonStyle={this.state.motionEnabled ? activeBackgroundStyle : inactiveBackgroundStyle}
                                 />
                             </div>
                         </Col>
@@ -245,6 +200,29 @@ export class Lights extends React.Component<Props, State> {
                                     onChangeColor={this.handleChangeColor}
                                 />
                             }
+                        </Col>
+
+
+                        { /* Right bar */ }
+                        <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
+                            <div style={bar_parentStyle}>
+                                <RaisedButton
+                                    icon={<i className="material-icons">lens</i>}
+                                    onClick={() => this.handleChangeLightBehavior('solid')}
+                                    label="Solid"
+                                    labelStyle={this.state.pythonScript === 'Solid.py' ? activeLabelStyle : {}}
+                                    style={this.state.pythonScript === 'Solid.py' ? activeButtonStyle : inactiveButtonStyle}
+                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? activeBackgroundStyle : inactiveBackgroundStyle}
+                                />
+                                <RaisedButton
+                                    icon={<i className="material-icons">hdr_strong</i>}
+                                    onClick={() => this.handleChangeLightBehavior('blink')}
+                                    label="Blink"
+                                    labelStyle={this.state.pythonScript === 'Solid.py' ? {} : activeLabelStyle}
+                                    style={this.state.pythonScript === 'Solid.py' ? inactiveButtonStyle : activeButtonStyle}
+                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? inactiveBackgroundStyle : activeBackgroundStyle}
+                                />
+                            </div>
                         </Col>
 
 
