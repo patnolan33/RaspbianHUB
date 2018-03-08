@@ -9,6 +9,8 @@ import { Weathrly } from '../components/weathrly/lib/Weathrly/Weathrly';
 import { Lights } from '../components/Lights';
 import { Calendar } from '../components/Calendar';
 
+import * as deepcopy from 'deepcopy';
+var net = electronRequire('net');
 
 type Props = {
     activePage?: number
@@ -16,6 +18,8 @@ type Props = {
 
 
 type State = {
+    tcpServer?: any,
+    tcpSockets?: any[]
 }
 
 export class PageContainer extends React.Component<Props, State> {
@@ -24,10 +28,66 @@ export class PageContainer extends React.Component<Props, State> {
         super(props);
 
         this.state = {
+            tcpServer: null,
+            tcpSockets: []
         }
     }
 
-    componentDidMount(){
+    componentDidMount() {
+        this.setupTCPServer();
+    }
+
+    setupTCPServer = () => {
+        // Close server if already exists:
+        if(this.state.tcpServer !== null) {
+            this.state.tcpServer.close();
+        }
+
+        // Close all existing sockets:
+        let tcpSockets = deepcopy(this.state.tcpSockets);
+        for(let i = 0; i < tcpSockets.length; i++) {
+            tcpSockets[i].destroy();
+        }
+        this.setState({tcpSockets: []});
+
+        // Create a TCP socket listener
+        let tcpServer = net.createServer(function (socket: any) {
+            // Add the new client socket connection to the array of sockets
+            this.state.tcpSockets.push(socket);
+
+            // 'data' is an event that means that a message was just sent by the client application
+            socket.on('data', function (msg_sent: any) {
+                // console.log("Data from socket: " + msg_sent);
+                let jsonData: TCPReturnType = JSON.parse(msg_sent);
+                this.parseTCPClientData(jsonData);
+            }.bind(this));
+            // Use splice to get rid of the socket that is ending.
+            // The 'end' event means tcp client has disconnected.
+            socket.on('end', function () {
+                // let sockets = deepcopy(this.state.tcpSockets);
+                let i = this.state.tcpSockets.indexOf(socket);
+                this.state.tcpSockets.splice(i, 1);
+            }.bind(this));
+
+        }.bind(this));
+
+        this.setState({tcpServer: tcpServer}, () => {
+            // TODO: Allow for user configuration of the port and probably address too
+            try{
+                this.state.tcpServer.listen(1234);
+            }
+            catch(e) {
+                console.log(e);
+            }
+
+            console.log('System listening at http://127.0.0.1:1234');
+        });
+
+    }
+
+    parseTCPClientData = (jsonData: TCPReturnType) => {
+        console.log("ParseTCPClientData: ");
+        console.log(jsonData);
     }
 
     render() {
