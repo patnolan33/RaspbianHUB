@@ -1,16 +1,16 @@
 var net = require('net');
-var raspio = require('raspi-io');
+var raspi = require('raspi-io');
 var five = require("johnny-five");
 var board = new five.Board({
   io: new raspi()
 });
 
-function makeTCPRequest(messagType: string, messageData: string) {
+function makeTCPRequest(messageType, messageData) {
   let socket = new net.Socket();
   setupTCPSocket(socket);
   socket.connect(1234, '127.0.0.1', function() {
     let tcpRequest = {
-      messageType: messagType,
+      messageType: messageType,
       messageData: messageData
     };
     socket.write(JSON.stringify(tcpRequest));
@@ -18,10 +18,10 @@ function makeTCPRequest(messagType: string, messageData: string) {
   });
 }
 
-function setupTCPSocket(socket: any) {
+function setupTCPSocket(socket) {
   // Add a 'data' event handler for the client socket
   // data is what the server sent to this socket
-  socket.on('data', function(data: any) {
+  socket.on('data', function(data) {
       console.log('DATA: ' + data);
   });
 
@@ -32,7 +32,7 @@ function setupTCPSocket(socket: any) {
   });
 
   // Add an 'error' event handler
-  socket.on('error', function(err: any) {
+  socket.on('error', function(err) {
       console.log('Socket ' + err);
       socket.destroy();
   });

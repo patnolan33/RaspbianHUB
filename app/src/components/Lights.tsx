@@ -101,7 +101,8 @@ export class Lights extends React.Component<Props, State> {
             args: ['#000000', '-c']
         };
 
-        if(this.state.lightsOn === false && (this.state.motionDetected && this.state.motionEnabled)) {
+// && (this.state.motionDetected && this.state.motionEnabled)
+        if(this.state.lightsOn === false) {
             options = {
                 mode: "text",
                 pythonOptions: ["-u"],

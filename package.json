@@ -34,6 +34,7 @@
     "node-loader": "^0.6.0",
     "onoff": "1.2.0",
     "python-shell": "^0.4.0",
+    "raspi-io": "^8.1.0",
     "react": "15.4.2",
     "react-bootstrap": "^0.32.0",
     "react-color": "^2.13.8",
