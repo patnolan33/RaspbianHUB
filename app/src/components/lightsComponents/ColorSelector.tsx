@@ -95,10 +95,10 @@ export class ColorSelector extends React.Component<Props, State> {
                     <Paper key={key} onClick={() => this.selectColor(key)} style={{backgroundColor: this.materialColors[key]}} rounded={false} zDepth={0} >
                         <Grid fluid>
                             <Col xs={6}>
-                                <h3 style={{color: tmpTextColor, padding: 20}}>{key}</h3>
+                                <h5 style={{color: tmpTextColor, padding: 20}}>{key}</h5>
                             </Col>
                             <Col xs={6}>
-                                <h3 style={{color: tmpTextColor, textAlign: 'right', padding: 20}}>{this.materialColors[key]}</h3>
+                                <h5 style={{color: tmpTextColor, textAlign: 'right', padding: 20}}>{this.materialColors[key]}</h5>
                             </Col>
                         </Grid>
                     </Paper>
@@ -120,7 +120,7 @@ export class ColorSelector extends React.Component<Props, State> {
 		                />
 		            </Col>
 		            <Col xs={11} md={11} style={{overflow: 'hidden', paddingRight: 0, paddingLeft: 0, left: 20+'px'}}>
-		                <div style={{height: height-50+'px', overflowY: 'scroll', width: 100+'%'}}>
+		                <div style={{height: height-90+'px', overflowY: 'scroll', width: 100+'%'}}>
 		                    {colorChoices}
 		                </div>
 		            </Col>

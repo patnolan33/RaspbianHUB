@@ -60,7 +60,7 @@ export class PageContainer extends React.Component<Props, State> {
             // 'data' is an event that means that a message was just sent by the client application
             socket.on('data', function (msg_sent: any) {
                 // console.log("Data from socket: " + msg_sent);
-                let jsonData: string = JSON.parse(msg_sent);
+                let jsonData: string = msg_sent;
                 this.parseTCPClientData(jsonData);
             }.bind(this));
             // Use splice to get rid of the socket that is ending.

@@ -35,7 +35,7 @@ export class Lights extends React.Component<Props, State> {
         super(props);
 
         this.state = {
-            color: '#000000',
+            color: '#ffffff',
             pickerType: 'custom',
             pythonScript: 'Solid.py',
             lightsOn: false,
@@ -50,9 +50,13 @@ export class Lights extends React.Component<Props, State> {
     componentDidMount() {
     }
 
-    componentWillRecieveProps(nextProps: Props) {
+    componentWillReceiveProps(nextProps: Props) {
         if(nextProps.motionDetected !== this.props.motionDetected) {
             this.runPythonScript_Lights();
+
+	    if(nextProps.motionDetected === true) {
+		this.setState({lightsOn: true});
+	    }
         }
     }
 
@@ -170,7 +174,7 @@ export class Lights extends React.Component<Props, State> {
                     <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
 
                         { /* Left bar */ }
-                        <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
+                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
                             <div style={bar_parentStyle}>
                                 <RaisedButton
                                     icon={this.state.lightsOn ? <i className="material-icons">highlight_off</i> : <i className="material-icons">power_settings_new</i>}
@@ -192,7 +196,7 @@ export class Lights extends React.Component<Props, State> {
                             </div>
                         </Col>
 
-                        <Col xs={10} md={10} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800, overflow: 'hidden'}}>
+                        <Col xs={8} md={8} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800, overflow: 'hidden'}}>
                             {this.state.pickerType === "swatch" &&
                                 <SwatchesPicker
                                     color={this.state.color}
@@ -214,7 +218,7 @@ export class Lights extends React.Component<Props, State> {
 
 
                         { /* Right bar */ }
-                        <Col xs={1} md={1} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
+                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
                             <div style={bar_parentStyle}>
                                 <RaisedButton
                                     icon={<i className="material-icons">lens</i>}
