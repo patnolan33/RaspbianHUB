@@ -50,6 +50,12 @@ export class Lights extends React.Component<Props, State> {
     componentDidMount() {
     }
 
+    componentWillRecieveProps(nextProps: Props) {
+        if(nextProps.motionDetected !== this.props.motionDetected) {
+            this.runPythonScript_Lights();
+        }
+    }
+
     runPythonScript_Lights = () => {
         // Kill old python script:
         if(this.pythonShell_Light) {
@@ -64,8 +70,12 @@ export class Lights extends React.Component<Props, State> {
             args: ['#000000', '-c']
         };
 
-        if(this.state.lightsOn === false &&
-            (this.props.motionDetected === true && this.state.motionEnabled === true)) {
+        let motion_turnOn = false;
+        if((this.props.motionDetected === true && this.state.motionEnabled === true) || this.state.motionEnabled === false ) {
+            motion_turnOn = true;
+        }
+
+        if(this.state.lightsOn === false && motion_turnOn === true) {
             options = {
                 mode: "text",
                 pythonOptions: ["-u"],

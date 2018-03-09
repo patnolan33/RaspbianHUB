@@ -5,14 +5,14 @@ var board = new five.Board({
   io: new raspi()
 });
 
-function makeTCPRequest(turnOn: boolean) {
+function tcp_toggleLights() {
   let socket = new net.Socket();
   setupTCPSocket(socket);
   socket.connect(1234, '127.0.0.1', function() {
-    let tcpRequest = {
-      turnOn: turnOn
-    };
-    socket.write(JSON.stringify(tcpRequest));
+    // let tcpRequest = {
+    //   turnOn: turnOn
+    // };
+    socket.write("on_motion");
     socket.end();
   });
 }
@@ -52,14 +52,14 @@ board.on("ready", function() {
   // proximal area is disrupted, generally by some form of movement
   motion.on("motionstart", function() {
     console.log("motionstart");
-    makeTCPRequest(true);
+    tcp_toggleLights();
   });
 
   // "motionend" events are fired following a "motionstart" event
   // when no movement has occurred in X ms
   motion.on("motionend", function() {
     console.log("motionend");
-    makeTCPRequest(false);
+    // tcp_toggleLights();
   });
 
   // "data" events are fired at the interval set in opts.freq
