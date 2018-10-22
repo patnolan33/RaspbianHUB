@@ -3,7 +3,6 @@ import * as React from "react";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
-import { TCPServer } from "../util/TCPServer";
 
 const darkMuiTheme = getMuiTheme(darkBaseTheme);
 
@@ -24,8 +23,6 @@ type State = {
 };
 
 export default class AppContainer extends React.Component<Props, State> {
-  tcpServer: TCPServer;
-
   constructor(props: Props) {
     super(props);
 
@@ -33,15 +30,9 @@ export default class AppContainer extends React.Component<Props, State> {
       openDrawer: false,
       selectedPage: 0
     };
-
-    this.tcpServer = new TCPServer("10.0.0.185", 10000, this.turnOnOff);
   }
 
   componentDidMount() {}
-
-  turnOnOff = (turnOn: boolean) => {
-    console.log("Turn on off result: " + turnOn);
-  };
 
   changePage = (index: number) => {
     this.setState({ selectedPage: index });
