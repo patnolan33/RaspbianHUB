@@ -6,9 +6,9 @@
 import time
 import sys
 
-color = sys.argv[1]
+#color = sys.argv[1]
 
-print "Color: %s." % color
+#print "Color: %s." % color
 
 from neopixel import *
 

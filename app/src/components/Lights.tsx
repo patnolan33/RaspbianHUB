@@ -1,249 +1,312 @@
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import getMuiTheme from "material-ui/styles/getMuiTheme";
+import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
 const darkMuiTheme = getMuiTheme(darkBaseTheme);
-import * as React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
+import * as React from "react";
+import RaisedButton from "material-ui/RaisedButton";
 
-import { Grid, Col } from 'react-bootstrap';
-import { SwatchesPicker, ChromePicker } from 'react-color';
-import * as colors from 'material-ui/styles/colors';
+import { Grid, Col } from "react-bootstrap";
+import { SwatchesPicker, ChromePicker } from "react-color";
+import * as colors from "material-ui/styles/colors";
 
-import { CustomColorPicker } from './lightsComponents/CustomColorPicker';
-var PythonShell = require('python-shell');
+import { CustomColorPicker } from "./lightsComponents/CustomColorPicker";
+var PythonShell = require("python-shell");
 
 type Props = {
-    motionDetected: boolean
-}
+  lightsOn: boolean;
+};
 
 type State = {
-    color?: string,
-    pickerType?: "swatch" | "chrome" | "custom",
-    pythonScript?: string,
-    lightsOn?: boolean,
-    numLEDs?: number,
-    brightness?: number,
-    motionEnabled?: boolean
-}
+  color?: string;
+  pickerType?: "swatch" | "chrome" | "custom";
+  pythonScript?: string;
+  lightsOn?: boolean;
+  numLEDs?: number;
+  brightness?: number;
+};
 
 export class Lights extends React.Component<Props, State> {
-    pythonShell_Light: any;
-    pythonShell_Motion: any;
-    pixelData: Uint32Array;
+  pythonShell_Light: any;
+  pythonShell_Motion: any;
+  pixelData: Uint32Array;
 
-    constructor(props: Props) {
-        super(props);
+  constructor(props: Props) {
+    super(props);
 
-        this.state = {
-            color: '#ffffff',
-            pickerType: 'custom',
-            pythonScript: 'Solid.py',
-            lightsOn: false,
-	        numLEDs: 30,
-            brightness: 128,
-            motionEnabled: true
-        }
+    this.state = {
+      color: "#ffffff",
+      pickerType: "custom",
+      pythonScript: "Solid.py",
+      lightsOn: false,
+      numLEDs: 30,
+      brightness: 128
+    };
 
-        this.runPythonScript_Lights();
+    this.runPythonScript_Lights();
+  }
+
+  componentDidMount() {}
+
+  componentWillReceiveProps(nextProps: Props) {
+    if (nextProps.lightsOn !== this.props.lightsOn) {
+      this.setState({ lightsOn: true });
+      this.runPythonScript_Lights();
+    }
+  }
+
+  runPythonScript_Lights = () => {
+    // Kill old python script:
+    if (this.pythonShell_Light) {
+      this.pythonShell_Light.childProcess.kill("SIGINT");
+      this.pythonShell_Light = null;
     }
 
-    componentDidMount() {
+    let options = {
+      mode: "text",
+      pythonOptions: ["-u"],
+      scriptPath: "./python/",
+      args: ["#000000", "-c"]
+    };
+
+    if (this.state.lightsOn === false) {
+      options = {
+        mode: "text",
+        pythonOptions: ["-u"],
+        scriptPath: "./python/",
+        args: [this.state.color, "-c"]
+      };
     }
 
-    componentWillReceiveProps(nextProps: Props) {
-        if(nextProps.motionDetected !== this.props.motionDetected) {
-            this.runPythonScript_Lights();
-
-	    if(nextProps.motionDetected === true) {
-		this.setState({lightsOn: true});
-	    }
+    this.pythonShell_Light = PythonShell.run(
+      this.state.pythonScript,
+      options,
+      function(err: any, results: any) {
+        if (err) {
+          console.log(err);
+          throw err;
         }
+
+        console.log("Lights results: ");
+        console.log(results);
+      }.bind(this)
+    );
+  };
+
+  handleChangeLightBehavior = (behavior: string) => {
+    let script = "";
+    if (behavior === "solid") {
+      script = "Solid.py";
+    } else if (behavior === "blink") {
+      script = "Strandtest.py";
     }
 
-    runPythonScript_Lights = () => {
-        // Kill old python script:
-        if(this.pythonShell_Light) {
-            this.pythonShell_Light.childProcess.kill('SIGINT');
-            this.pythonShell_Light = null;
-        }
+    this.setState({ pythonScript: script });
+  };
 
-        let options = {
-            mode: "text",
-            pythonOptions: ["-u"],
-            scriptPath: "./python/",
-            args: ['#000000', '-c']
-        };
+  handleChangeComplete = (color: any) => {
+    console.log(color);
+    this.setState({ color: color.hex });
+  };
 
-        let motion_turnOn = false;
-        if((this.props.motionDetected === true && this.state.motionEnabled === true) || this.state.motionEnabled === false ) {
-            motion_turnOn = true;
-        }
+  handleChangeColor = (color: string) => {
+    this.setState({ color: color });
+  };
 
-        if(this.state.lightsOn === false && motion_turnOn === true) {
-            options = {
-                mode: "text",
-                pythonOptions: ["-u"],
-                scriptPath: "./python/",
-                args: [this.state.color, '-c']
-            };
-        }
+  handleLightsOn = (lightsOn: boolean) => {
+    this.setState({ lightsOn });
 
-        this.pythonShell_Light = PythonShell.run(this.state.pythonScript, options, function(err: any, results: any) {
-            if(err){
-                console.log(err);
-                throw err;
-            }
+    // Run python script to turn on lights with script:
+    this.runPythonScript_Lights();
+  };
 
-            console.log("Lights results: ");
-            console.log(results);
-        }.bind(this));
-    }
+  render() {
+    const height = window.screen.height;
+    // const width = window.screen.width;
 
-    handleChangeLightBehavior = (behavior: string) => {
-        let script = '';
-        if(behavior === 'solid') {
-            script = 'Solid.py';
-        }
-        else if(behavior === 'blink') {
-            script = 'Strandtest.py';
-        }
+    const bar_parentStyle = {
+      width: 100 + "%",
+      display: "flex" as "flex",
+      flexDirection: "column" as "column"
+    };
 
-        this.setState({pythonScript: script});
-    }
+    let inactiveButtonStyle = {
+      width: 100 + "%",
+      flex: 1,
+      borderStyle: "solid",
+      borderColor: colors.grey800
+    };
 
-    handleChangeComplete = (color: any) => {
-        console.log(color);
-        this.setState({color: color.hex});
-    }
+    let activeButtonStyle = {
+      width: 100 + "%",
+      flex: 1,
+      borderStyle: "solid",
+      borderColor: colors.grey800,
+      color: colors.cyan700
+    };
 
-    handleChangeColor = (color: string) => {
-        this.setState({color: color});
-    }
+    let inactiveBackgroundStyle = {
+      height: 100 + "%"
+    };
 
-    handleLightsOn = (lightsOn: boolean) => {
-        this.setState({lightsOn});
+    let activeBackgroundStyle = {
+      height: 100 + "%",
+      backgroundColor: colors.grey800
+    };
 
-        // Run python script to turn on lights with script:
-        this.runPythonScript_Lights();
-    }
+    let activeLabelStyle = {
+      color: colors.cyan700
+    };
 
+    return (
+      <MuiThemeProvider muiTheme={darkMuiTheme}>
+        <div>
+          <Grid fluid style={{ paddingLeft: 0, paddingRight: 0 }}>
+            {/* Left bar */}
+            <Col
+              xs={2}
+              md={2}
+              style={{
+                paddingLeft: 0,
+                paddingRight: 0,
+                height: height - 90 + "px",
+                display: "flex"
+              }}
+            >
+              <div style={bar_parentStyle}>
+                <RaisedButton
+                  icon={
+                    this.state.lightsOn ? (
+                      <i className="material-icons">highlight_off</i>
+                    ) : (
+                      <i className="material-icons">power_settings_new</i>
+                    )
+                  }
+                  onClick={() => this.handleLightsOn(!this.state.lightsOn)}
+                  label={this.state.lightsOn ? "Off" : "On"}
+                  labelStyle={this.state.lightsOn ? activeLabelStyle : {}}
+                  style={
+                    this.state.lightsOn
+                      ? activeButtonStyle
+                      : inactiveButtonStyle
+                  }
+                  buttonStyle={
+                    this.state.lightsOn
+                      ? activeBackgroundStyle
+                      : inactiveBackgroundStyle
+                  }
+                />
 
-    render() {
+                {/* <RaisedButton
+                  icon={
+                    this.state.motionEnabled ? (
+                      <i className="material-icons">clear</i>
+                    ) : (
+                      <i className="material-icons">done</i>
+                    )
+                  }
+                  onClick={() =>
+                    this.setState({ motionEnabled: !this.state.motionEnabled })
+                  }
+                  label={"Motion"}
+                  labelStyle={this.state.motionEnabled ? activeLabelStyle : {}}
+                  style={
+                    this.state.motionEnabled
+                      ? activeButtonStyle
+                      : inactiveButtonStyle
+                  }
+                  buttonStyle={
+                    this.state.motionEnabled
+                      ? activeBackgroundStyle
+                      : inactiveBackgroundStyle
+                  }
+                /> */}
+              </div>
+            </Col>
 
-        const height = window.screen.height;
-        // const width = window.screen.width;
+            <Col
+              xs={8}
+              md={8}
+              style={{
+                paddingLeft: 0,
+                paddingRight: 0,
+                backgroundColor: colors.grey800,
+                overflow: "hidden"
+              }}
+            >
+              {this.state.pickerType === "swatch" && (
+                <SwatchesPicker
+                  color={this.state.color}
+                  onChangeComplete={this.handleChangeComplete}
+                />
+              )}
+              {this.state.pickerType === "chrome" && (
+                <ChromePicker
+                  color={this.state.color}
+                  onChangeComplete={this.handleChangeComplete}
+                />
+              )}
+              {this.state.pickerType === "custom" && (
+                <CustomColorPicker onChangeColor={this.handleChangeColor} />
+              )}
+            </Col>
 
-        const bar_parentStyle = {
-            width: 100+'%',
-            display: 'flex' as 'flex',
-            flexDirection: 'column' as 'column'
-        };
-
-        let inactiveButtonStyle = {
-            width: 100+'%',
-            flex: 1,
-            borderStyle: 'solid',
-            borderColor: colors.grey800,
-        };
-
-        let activeButtonStyle = {
-            width: 100+'%',
-            flex: 1,
-            borderStyle: 'solid',
-            borderColor: colors.grey800,
-            color: colors.cyan700
-        }
-
-        let inactiveBackgroundStyle = {
-            height: 100+'%'
-        }
-
-        let activeBackgroundStyle = {
-            height: 100+'%',
-            backgroundColor: colors.grey800
-        }
-
-        let activeLabelStyle = {
-            color: colors.cyan700
-        }
-
-
-        return(
-            <MuiThemeProvider muiTheme={darkMuiTheme}>
-                <div>
-                    <Grid fluid style={{paddingLeft: 0, paddingRight: 0}}>
-
-                        { /* Left bar */ }
-                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
-                            <div style={bar_parentStyle}>
-                                <RaisedButton
-                                    icon={this.state.lightsOn ? <i className="material-icons">highlight_off</i> : <i className="material-icons">power_settings_new</i>}
-                                    onClick={() => this.handleLightsOn(!this.state.lightsOn)}
-                                    label={this.state.lightsOn ? "Off" : "On"}
-                                    labelStyle={this.state.lightsOn ? activeLabelStyle : {}}
-                                    style={this.state.lightsOn ? activeButtonStyle : inactiveButtonStyle}
-                                    buttonStyle={this.state.lightsOn ? activeBackgroundStyle : inactiveBackgroundStyle}
-                                />
-
-                                <RaisedButton
-                                    icon={this.state.motionEnabled ? <i className="material-icons">clear</i> : <i className="material-icons">done</i>}
-                                    onClick={() => this.setState({motionEnabled: !this.state.motionEnabled})}
-                                    label={"Motion"}
-                                    labelStyle={this.state.motionEnabled ? activeLabelStyle : {}}
-                                    style={this.state.motionEnabled ? activeButtonStyle : inactiveButtonStyle}
-                                    buttonStyle={this.state.motionEnabled ? activeBackgroundStyle : inactiveBackgroundStyle}
-                                />
-                            </div>
-                        </Col>
-
-                        <Col xs={8} md={8} style={{paddingLeft: 0, paddingRight: 0, backgroundColor: colors.grey800, overflow: 'hidden'}}>
-                            {this.state.pickerType === "swatch" &&
-                                <SwatchesPicker
-                                    color={this.state.color}
-                                    onChangeComplete={this.handleChangeComplete}
-                                />
-                            }
-                            {this.state.pickerType === "chrome" &&
-                                <ChromePicker
-                                    color={this.state.color}
-                                    onChangeComplete={this.handleChangeComplete}
-                                />
-                            }
-                            {this.state.pickerType === "custom" &&
-                                <CustomColorPicker
-                                    onChangeColor={this.handleChangeColor}
-                                />
-                            }
-                        </Col>
-
-
-                        { /* Right bar */ }
-                        <Col xs={2} md={2} style={{paddingLeft: 0, paddingRight: 0, height: height-90+'px', display: 'flex'}}>
-                            <div style={bar_parentStyle}>
-                                <RaisedButton
-                                    icon={<i className="material-icons">lens</i>}
-                                    onClick={() => this.handleChangeLightBehavior('solid')}
-                                    label="Solid"
-                                    labelStyle={this.state.pythonScript === 'Solid.py' ? activeLabelStyle : {}}
-                                    style={this.state.pythonScript === 'Solid.py' ? activeButtonStyle : inactiveButtonStyle}
-                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? activeBackgroundStyle : inactiveBackgroundStyle}
-                                />
-                                <RaisedButton
-                                    icon={<i className="material-icons">hdr_strong</i>}
-                                    onClick={() => this.handleChangeLightBehavior('blink')}
-                                    label="Blink"
-                                    labelStyle={this.state.pythonScript === 'Solid.py' ? {} : activeLabelStyle}
-                                    style={this.state.pythonScript === 'Solid.py' ? inactiveButtonStyle : activeButtonStyle}
-                                    buttonStyle={this.state.pythonScript === 'Solid.py' ? inactiveBackgroundStyle : activeBackgroundStyle}
-                                />
-                            </div>
-                        </Col>
-
-
-                    </Grid>
-                </div>
-            </MuiThemeProvider>
-        )
-
-    }
+            {/* Right bar */}
+            <Col
+              xs={2}
+              md={2}
+              style={{
+                paddingLeft: 0,
+                paddingRight: 0,
+                height: height - 90 + "px",
+                display: "flex"
+              }}
+            >
+              <div style={bar_parentStyle}>
+                <RaisedButton
+                  icon={<i className="material-icons">lens</i>}
+                  onClick={() => this.handleChangeLightBehavior("solid")}
+                  label="Solid"
+                  labelStyle={
+                    this.state.pythonScript === "Solid.py"
+                      ? activeLabelStyle
+                      : {}
+                  }
+                  style={
+                    this.state.pythonScript === "Solid.py"
+                      ? activeButtonStyle
+                      : inactiveButtonStyle
+                  }
+                  buttonStyle={
+                    this.state.pythonScript === "Solid.py"
+                      ? activeBackgroundStyle
+                      : inactiveBackgroundStyle
+                  }
+                />
+                <RaisedButton
+                  icon={<i className="material-icons">hdr_strong</i>}
+                  onClick={() => this.handleChangeLightBehavior("blink")}
+                  label="Blink"
+                  labelStyle={
+                    this.state.pythonScript === "Solid.py"
+                      ? {}
+                      : activeLabelStyle
+                  }
+                  style={
+                    this.state.pythonScript === "Solid.py"
+                      ? inactiveButtonStyle
+                      : activeButtonStyle
+                  }
+                  buttonStyle={
+                    this.state.pythonScript === "Solid.py"
+                      ? inactiveBackgroundStyle
+                      : activeBackgroundStyle
+                  }
+                />
+              </div>
+            </Col>
+          </Grid>
+        </div>
+      </MuiThemeProvider>
+    );
+  }
 }
